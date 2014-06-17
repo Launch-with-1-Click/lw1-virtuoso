@@ -1,0 +1,7 @@
+*.swp
+env.sh
+env2.sh
+.vagrant/
+tmp/
+.rvmrc
+cookbooks/

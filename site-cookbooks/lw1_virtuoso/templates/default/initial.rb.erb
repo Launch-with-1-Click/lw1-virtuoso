@@ -1,0 +1,35 @@
+template '/opt/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini' do
+  action :create
+  local true
+  source '/opt/lw1/templates/virtuoso.ini.erb'
+  owner 'virtuoso'
+  group 'virtuoso'
+  variables node[:ec2]
+  backup false
+end
+
+bash 'update password' do
+  user 'virtuoso'
+  cwd '/opt/virtuoso-opensource'
+  code <<-EOH
+  ./bin/virtuoso-t +pwdold dba +pwddba #{node[:ec2][:instance_id]} +pwddav #{node[:ec2][:instance_id]} -c var/lib/virtuoso/db/virtuoso.ini -f
+  EOH
+end
+
+service 'virtuoso' do
+  action [:start, :enable]
+end
+
+file '/etc/cron.d/first_boot' do
+  action :delete
+end
+
+directory '/opt/lw1' do
+  action :delete
+  recursive true
+end
+
+directory '/var/chef/cache' do
+  action :delete
+  recursive true
+end

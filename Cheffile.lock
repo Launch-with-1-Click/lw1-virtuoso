@@ -1,0 +1,8 @@
+SITE
+  remote: http://community.opscode.com/api/v1
+  specs:
+    simplelog_handler (1.0.0)
+
+DEPENDENCIES
+  simplelog_handler (>= 0)
+

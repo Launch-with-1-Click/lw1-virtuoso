@@ -1,0 +1,87 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides: start-virtuoso stop-virtuoso
+# Required-Start: networking
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Description: Virtuoso OpenSource
+### END INIT INFO
+
+. /etc/init.d/functions
+VIRT_USER=${VIRT_USER:-"virtuoso"}
+VIRT_HOME=${VIRT_HOME:-"/opt/virtuoso-opensource"}
+VIRT_CONF="var/lib/virtuoso/db/virtuoso.ini"
+
+if [ -f ${VIRT_HOME}/var/lib/virtuoso/db/virtuoso.lck ] ; then
+  . ${VIRT_HOME}/var/lib/virtuoso/db/virtuoso.lck
+fi
+
+start(){
+  if [ -n "$VIRT_PID" ]; then
+    C_PID=`pgrep virtuoso -U ${VIRT_USER}`
+    if [ "$C_PID" = "$VIRT_PID" ] ; then
+      echo "Virtuoso OpenSource already running with pid ${VIRT_PID}."
+      return 0
+    fi
+  fi
+
+  echo -n "Starting Virtuoso OpenSource..."
+  cd ${VIRT_HOME}
+  daemon --user $VIRT_USER ./bin/virtuoso-t -c ${VIRT_CONF}
+  RET=$?
+  echo
+  [ $RET -eq 0 ]
+  return $RET
+}
+
+stop(){
+  echo -n "Stopping Virtuoso OpenSource..."
+  if [ -z "$VIRT_PID" ]; then
+    echo "    Not running."
+    return 0
+  fi
+  kill $VIRT_PID
+  RET=$?
+  if [ $RET -eq 0 ];then
+    success
+    echo
+    return 0
+  fi
+  failure
+  echo
+  return 1
+}
+
+status () {
+  if [ -z "$VIRT_PID" ]; then
+    echo "Virtuoso OpenSource Not running."
+    return 3
+  fi
+  C_PID=`pgrep virtuoso -U ${VIRT_USER}`
+  if [ "$C_PID" = "$VIRT_PID" ] ; then
+    echo "Virtuoso OpenSource runnning with pid ${VIRT_PID}"
+    return 0
+  fi
+  echo "Virtuoso OpenSource Not running but lock file exist."
+  return 3
+}
+
+case "$1" in
+start)
+        start
+        ;;
+stop)
+        stop
+        ;;
+status)
+        status
+        ;;
+restart)
+        stop
+        start
+        ;;
+*)
+        printf "\nUsage: $0 \n
+                start | stop | restart | status\n"
+        ;;
+esac

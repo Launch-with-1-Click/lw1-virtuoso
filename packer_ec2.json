@@ -1,0 +1,53 @@
+{
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "us-east-1",
+      "source_ami": "ami-fb8e9292",
+      "instance_type": "c3.2xlarge",
+      "ssh_username": "ec2-user",
+      "ssh_timeout": "10m",
+      "ami_name": "Virtuoso OpenSource 7.1 {{timestamp}}"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "chef_prepare.sh"
+      ]
+    },
+    {
+      "type": "chef-solo",
+      "cookbook_paths": [
+        "site-cookbooks"
+      ],
+      "run_list" : [
+        "lw1_virtuoso::user_group"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "bootstrap.sh"
+      ]
+    },
+    {
+      "type": "chef-solo",
+      "cookbook_paths": [
+        "site-cookbooks"
+      ],
+      "run_list" : [
+        "lw1_virtuoso::regist_service",
+        "lw1_virtuoso::set_initiaize"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "cleanup.sh"
+      ]
+    }
+  ]
+}
