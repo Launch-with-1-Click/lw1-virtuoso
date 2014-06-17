@@ -1,0 +1,2 @@
+@reboot root /usr/bin/chef-apply /opt/lw1/initial.rb > /dev/null
+
