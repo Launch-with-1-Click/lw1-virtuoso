@@ -3,11 +3,11 @@
     {
       "type": "amazon-ebs",
       "region": "us-east-1",
-      "source_ami": "ami-fb8e9292",
+      "source_ami": "ami-08842d60",
       "instance_type": "c3.2xlarge",
       "ssh_username": "ec2-user",
       "ssh_timeout": "10m",
-      "ami_name": "Virtuoso OpenSource 7.1 {{timestamp}}"
+      "ami_name": "Virtuoso OpenSource 7.1 2014.9 {{timestamp}}"
     }
   ],
 
