@@ -1,13 +1,19 @@
 {
+  "variables": {
+    "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
+  },
   "builders": [
     {
       "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
       "region": "us-east-1",
-      "source_ami": "ami-08842d60",
+      "source_ami": "ami-b66ed3de",
       "instance_type": "c3.2xlarge",
       "ssh_username": "ec2-user",
       "ssh_timeout": "10m",
-      "ami_name": "Virtuoso OpenSource 7.1 2014.9 {{timestamp}}"
+      "ami_name": "Virtuoso OpenSource 7.1 2014.9.1 {{timestamp}}"
     }
   ],
 
