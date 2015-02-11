@@ -1,6 +1,6 @@
 # Virtuoso Open-Source
 
-for Amazon Linux AMI 2014.03.1.
+for Amazon Linux AMI 2014.09.1.
 
 ## Setup
 
