@@ -1,0 +1,59 @@
+{
+  "variables": {
+    "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "us-east-1",
+      "source_ami": "ami-8e682ce6",
+      "instance_type": "c3.2xlarge",
+      "ssh_username": "ec2-user",
+      "ssh_timeout": "10m",
+      "ami_name": "Virtuoso OpenSource 7.1 2014.09.2 PV {{timestamp}}"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "chef_prepare.sh"
+      ]
+    },
+    {
+      "type": "chef-solo",
+      "cookbook_paths": [
+        "site-cookbooks"
+      ],
+      "run_list" : [
+        "lw1_virtuoso::user_group"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "bootstrap.sh"
+      ]
+    },
+    {
+      "type": "chef-solo",
+      "cookbook_paths": [
+        "site-cookbooks"
+      ],
+      "run_list" : [
+        "lw1_virtuoso::regist_service",
+        "lw1_virtuoso::set_initiaize"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "cleanup.sh"
+      ]
+    }
+  ]
+}
