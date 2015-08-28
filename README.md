@@ -15,7 +15,7 @@ source env.sh # Copy and fill env.sh.sample
 ```
 bundle
 librarian-chef install
-vagrant up --provide=aws
+vagrant up --provider=aws
 ```
 
 and reboot instance.
