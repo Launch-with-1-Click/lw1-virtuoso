@@ -9,11 +9,12 @@
       "access_key": "{{user `aws_access_key`}}",
       "secret_key": "{{user `aws_secret_key`}}",
       "region": "us-east-1",
-      "source_ami": "ami-b66ed3de",
+      "source_ami": "ami-1ecae776",
       "instance_type": "c3.2xlarge",
       "ssh_username": "ec2-user",
       "ssh_timeout": "10m",
-      "ami_name": "Virtuoso OpenSource 7.1 2014.9.1 {{timestamp}}"
+      "ssh_pty" : true,
+      "ami_name": "Virtuoso OpenSource 7.2.1 2015.3 {{timestamp}}"
     }
   ],
 
