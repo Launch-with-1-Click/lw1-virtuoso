@@ -20,16 +20,29 @@ service 'virtuoso' do
   action [:start, :enable]
 end
 
+bash 'enable cartridges_dav' do
+  cwd '/opt/virtuoso-opensource'
+  code <<-EOH
+  until netstat -tnl | grep '0.0.0.0:1111' ; do sleep 3 ; done
+  ./bin/isql 127.0.0.1 dba #{node[:ec2][:instance_id]} /opt/lw1/files/isql_cartridges_dav
+  EOH
+end
+
 file '/etc/cron.d/first_boot' do
   action :delete
 end
 
-directory '/opt/lw1' do
+# directory '/opt/lw1' do
+#   action :delete
+#   recursive true
+# end
+
+directory '/var/chef/cache' do
   action :delete
   recursive true
 end
 
-directory '/var/chef/cache' do
+directory '/var/chef/backup' do
   action :delete
   recursive true
 end
