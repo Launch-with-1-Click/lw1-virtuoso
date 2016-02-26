@@ -8,6 +8,23 @@ template '/opt/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini' do
   backup false
 end
 
+bash 'create_cert_for_ssl' do
+  code <<-EOH
+  openssl genrsa 2048 > /etc/nginx/dummy_key.pem
+  openssl req -subj "/C=JP/ST=Kobe-shi/L=Chuo-ku/O=OpsRock LLC/OU=amiage.com/CN=#{node[:ec2][:public_ipv4] ? node[:ec2][:public_ipv4] : node[:ipaddress]}" \
+    -new -x509 -nodes -sha1 -days 3650 -key /etc/nginx/dummy_key.pem > /etc/nginx/dummy_cert.pem
+  EOH
+  creates '/etc/nginx/dummy_cert.pem'
+end
+
+file '/etc/nginx/dummy_key.pem' do
+  mode '0600'
+end
+
+file '/etc/nginx/dummy_cert.pem' do
+  mode '0600'
+end
+
 bash 'update password' do
   user 'virtuoso'
   cwd '/opt/virtuoso-opensource'
@@ -16,7 +33,30 @@ bash 'update password' do
   EOH
 end
 
+template "/opt/lw1/www/install_amiage.php" do
+  local true
+  mode  '0644'
+  owner "apache"
+  group "apache"
+  source "/opt/lw1/tasks/install_amiage.php.erb"
+  variables ({
+    :instance_id => node[:ec2][:instance_id]
+  })
+end
+
 service 'virtuoso' do
+  action [:start, :enable]
+end
+
+service 'nginx' do
+  action [:start, :enable]
+end
+
+service 'postfix' do
+  action [:start, :enable]
+end
+
+service 'php-fpm' do
   action [:start, :enable]
 end
 
