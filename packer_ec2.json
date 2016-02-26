@@ -47,6 +47,7 @@
         "site-cookbooks"
       ],
       "run_list" : [
+        "lw1_virtuoso::middlewares",
         "lw1_virtuoso::regist_service",
         "lw1_virtuoso::set_initiaize"
       ]
