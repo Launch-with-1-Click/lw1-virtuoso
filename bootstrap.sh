@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VT_VERSION='7.2.1'
+VT_VERSION='7.2.2'
 DEFAULT_USER='ec2-user'
 DEFAULT_GROUP='ec2-user'
 VT_USER='virtuoso'
