@@ -33,7 +33,7 @@ GEM
     coderay (1.1.0)
     diff-lcs (1.2.5)
     erubis (2.7.0)
-    ffi (1.9.3)
+    ffi (1.11.1)
     foodcritic (0.3.0)
       nokogiri (~> 1.5.0)
       xml-simple (~> 1.1.1)
